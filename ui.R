@@ -63,7 +63,15 @@ shinyUI(fluidPage(
                            p(),
                            HTML("Information on 2018 tax brackets and credits were obtained from <a href='https://www.forbes.com/sites/kellyphillipserb/2017/10/19/irs-announces-2018-tax-brackets-standard-deduction-amounts-and-more/#586bdff0273b'>this Forbes article</a>.
                                  Information on proposed changes to the 2018 tax brackets and credits in H.R. 1 were obtained from <a href='http://www.businessinsider.com/tax-brackets-2018-trump-tax-plan-chart-house-senate-comparison-2017-11'> this Business Insider article</a>.")
-                  )
+                  ),
+                  # Tab with contact info for reps!
+                  tabPanel("What Can I Do About This?",
+                           h5("Channel your anger into action:"),
+                           tags$ol(
+                             tags$li("Contact your Representative! You can find your House representative here: "),a(href='https://www.house.gov/representatives/find/',"https://www.house.gov/representatives/find/"),
+                             tags$li("You can also call your Senators. Make sure they know how their constituents will be affected by this bill!  You can find phone numbers to call your Senators here: "),a(href='https://www.senate.gov/senators/contact/',"https://www.senate.gov/senators/contact/"),
+                             tags$li("Encourage other students to do the same! Share this information with your peers, advocacy is strongest in numbers.")
+                           ))
 
     ))
   )
