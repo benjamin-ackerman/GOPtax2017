@@ -8,8 +8,9 @@
 library(shiny)
 
 shinyServer(function(input, output) {
-
+  # First defined a function to calculate taxes
   taxes = function(stipend, tuition, status, exempt){
+    # Calculations for single filers
     if(status == "single"){
       exempt = 1
       standard_deduction = 6500
@@ -21,6 +22,7 @@ shinyServer(function(input, output) {
       }
       taxable_income = stipend - standard_deduction - exemption
       
+      # 2018 tax estimate
       if(taxable_income <= 9525){current_tax = 0.1 * taxable_income}
       if(taxable_income >= 9526 & taxable_income <= 38700){current_tax = .1*9525 + .15*(taxable_income - 9525)}
       if(taxable_income >= 38701 & taxable_income <= 93700){current_tax = .1*9525 + .15*(38700-9525) + .25*(taxable_income - 3870)}
@@ -29,15 +31,18 @@ shinyServer(function(input, output) {
       if(taxable_income >= 424951 & taxable_income <= 426700){current_tax = .1*9525 + .15*(38700-9525) + .25*(93700-38700) + .28*(195450-93700) + .33*(424950-195450)+ .35*(taxable_income - 424950)}
       if(taxable_income >= 426701){current_tax = .1*9525 + .15*(38700-9525) + .25*(93700-38700) + .28*(195450-93700) + .33*(424950-195450) + .35*(426700-424950) + .396*(taxable_income - 426700)}
       
+      # H.R. 1 changes
       proposed_standard_deduction = 12200
       proposed_exemption = 0
       proposed_taxable_income = stipend + tuition - proposed_standard_deduction - proposed_exemption
       
+      # 2018 H.R. 1 tax estimate
       if(proposed_taxable_income <= 45000){proposed_tax = 0.12 * proposed_taxable_income}
       if(proposed_taxable_income >= 45001 & proposed_taxable_income <= 200000){proposed_tax = .12*45000 + .25*(proposed_taxable_income - 45000)}
       if(proposed_taxable_income >= 200001 & proposed_taxable_income <= 500000){proposed_tax = .12*45000 + .25*(200000-45000) + .35*(proposed_taxable_income - 200001)}
       if(proposed_taxable_income >= 500001){proposed_tax = .12*45000 + .25*(200000-45000) + .35*(500000 - 200000 - 45000) + .396*(proposed_taxable_income - 500001)}
     }
+    # Calculations for married joint filers
     if(status == "married joint"){ #| status == "surviving spouse"){
       standard_deduction = 13000
       exempt = 2
@@ -49,6 +54,7 @@ shinyServer(function(input, output) {
       }
       taxable_income = stipend - standard_deduction - exemption
       
+      # 2018 tax estimate
       if(taxable_income <= 18650){current_tax = 0.1 * taxable_income}
       if(taxable_income >= 18651 & taxable_income <= 75900){current_tax = 1865 + .15*(taxable_income - 18650)}
       if(taxable_income >= 75901 & taxable_income <= 153100){current_tax = 10452.5 + .25*(taxable_income - 75900)}
@@ -57,23 +63,20 @@ shinyServer(function(input, output) {
       if(taxable_income >= 416701 & taxable_income <= 470700){current_tax = 112728 + .35*(taxable_income - 416700)}
       if(taxable_income >= 470701){current_tax = 131628 + .396*(taxable_income - 470700)}
       
-      if(stipend + tuition <= 313800){
-        proposed_exemption = as.numeric(exempt) * 4050
-      }
-      if(stipend + tuition > 313800){
-        proposed_exemption = (as.numeric(exempt)*4050)*(1 - (2*ceiling((stipend + tuition - 313800)/2500)/100))
-      }
-      
+      # H.R. 1 changes 
       proposed_standard_deduction = 24400
       proposed_exemption = 0
-      
       proposed_taxable_income = stipend + tuition - proposed_standard_deduction - proposed_exemption
       
+      # 2018 H.R. 1 tax estimate
       if(proposed_taxable_income <= 90000){proposed_tax = 0.12 * proposed_taxable_income}
       if(proposed_taxable_income >= 90001 & proposed_taxable_income <= 260000){proposed_tax = .12*90000 + .25*(proposed_taxable_income - 90000)}
       if(proposed_taxable_income >= 260001 & proposed_taxable_income <= 1000000){proposed_tax = .12*90000 + .25*(260000-90000) + .35*(proposed_taxable_income - 260001)}
       if(proposed_taxable_income >= 1000001){proposed_tax = .12*90000 + .25*(260000-90000) + .35*(1000000 - 260000 - 90000) + .396*(proposed_taxable_income - 1000001)}
     }
+    
+    # Here's code I started working on for other filing categories: However, they're for 2017 estimates and do not have the 2018 House GOP bill brackets. *More work needed to change this*
+    
     # if(status == "married separate"){
     #   standard_deduction = 6500
     #   
@@ -202,34 +205,3 @@ shinyServer(function(input, output) {
   })
 
 })
-
-
-# barplot(c(test[[1]],
-#           test[[3]]),
-#         names=c("No change to tax law","estimate under H.R. 1"),
-#         main="Estimated 2018 Federal Taxes",
-#         ylab='Dollars ($)', col=rgb(1,0,0,.5), border = FALSE)
-# segments(.6,test[[1]]+50, 
-#          .6,test[[3]]-50)
-# arrows(.6,test[[1]]+50, 
-#        .6,test[[3]]-50,
-#        lwd = 1.5, angle = 90,code = 3, length = 0.05)
-# text(.8,median(test[[1]]:test[[3]]),
-#      paste0("$",round(test[[3]]-
-#                         test[[1]])))
-
-# test = taxes(25000,0,"single",1)
-# if(test[[3]] < test[[1]]){
-#   barplot(c(test[[1]],
-#             test[[3]]),
-#           names=c("No change to tax law","estimate under H.R. 1"),
-#           main="Estimated 2018 Federal Taxes",
-#           ylab='Dollars ($)', col=rgb(1,0,0,.5), border = FALSE)
-#   segments(1.8,test[[3]]+50, 
-#            1.8,test[[1]]-50)
-#   arrows(1.8,test[[3]]+50, 
-#          1.8,test[[1]]-50,
-#          lwd = 1.5, angle = 90,code = 3, length = 0.05)
-#   text(2,median(test[[3]]:test[[1]]),
-#        paste0("$",round(test[[1]]-
-#                           test[[3]])))}
