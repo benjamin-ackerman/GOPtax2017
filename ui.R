@@ -12,7 +12,7 @@ shinyUI(fluidPage(
   # Application title
   titlePanel("How will the House Tax Bill Impact Graduate Students?"),
 
-  # Sidebar with a slider input for number of bins
+  # Sidebar with a input for filing status, stipend and tuition
   sidebarLayout(
     sidebarPanel(
       selectInput("status",
@@ -33,9 +33,10 @@ shinyUI(fluidPage(
       numericInput("tuition","How much is your program's annual tuition?",25000,min=0)
     ),
 
-    # Print taxes
+    # Print current 2018 estimated federal taxes, proposed 2018 estimated federal taxes, and a plot comparing them, along with a disclaimer tab
     mainPanel(
       tabsetPanel(type="tabs",
+                  # Tab with tax estimates
                   tabPanel("Tax Estimates",
                            p(),
                            HTML("Under the proposed House tax bill, tuition waivers would no longer be nontaxable.
@@ -52,7 +53,7 @@ shinyUI(fluidPage(
                            
                            plotOutput("plotdiff")
                            ),
-                  
+                  # Tab with disclaimer
                   tabPanel("Disclaimer",
                            p("The purpose of this app is to assess the potential impact of the proposed H.R. 1 bill on graduate students in the United States who receive nontaxable tuition waivers from their universities.
                                   This app should NOT be used to calculate personal estimated 2018 income taxes for official use.  
