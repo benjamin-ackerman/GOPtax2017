@@ -25,7 +25,7 @@ shinyServer(function(input, output) {
       # 2018 tax estimate
       if(taxable_income <= 9525){current_tax = 0.1 * taxable_income}
       if(taxable_income >= 9526 & taxable_income <= 38700){current_tax = .1*9525 + .15*(taxable_income - 9525)}
-      if(taxable_income >= 38701 & taxable_income <= 93700){current_tax = .1*9525 + .15*(38700-9525) + .25*(taxable_income - 3870)}
+      if(taxable_income >= 38701 & taxable_income <= 93700){current_tax = .1*9525 + .15*(38700-9525) + .25*(taxable_income - 38700)}
       if(taxable_income >= 93701 & taxable_income <= 195450){current_tax = .1*9525 + .15*(38700-9525) + .25*(93700-38700) + .28*(taxable_income - 93700)}
       if(taxable_income >= 195451 & taxable_income <= 424950){current_tax = .1*9525 + .15*(38700-9525) + .25*(93700-38700) + .28*(195450-93700) + .33*(taxable_income - 195450)}
       if(taxable_income >= 424951 & taxable_income <= 426700){current_tax = .1*9525 + .15*(38700-9525) + .25*(93700-38700) + .28*(195450-93700) + .33*(424950-195450)+ .35*(taxable_income - 424950)}
